@@ -60,7 +60,7 @@ export default function Index() {
           selectedImage={selectedImage}
         />
         {pickedEmoji && (
-          <EmojiSticker imageSize={24} stickerSource={pickedEmoji} />
+          <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />
         )}
       </View>
       {showAppOptions ? (
@@ -89,7 +89,10 @@ export default function Index() {
         </View>
       )}
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
-        <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
+        <EmojiList
+          onSelect={(item) => setPickedEmoji(item)}
+          onCloseModal={onModalClose}
+        />
       </EmojiPicker>
     </View>
   );

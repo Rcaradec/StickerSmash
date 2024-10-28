@@ -7,16 +7,16 @@ type Props = {
   onCloseModal: () => void;
 };
 
-export default function EmojiList({ onSelect, onCloseModal }: Props) {
-  const [emoji] = useState<ImageSource[]>([
-    require("../assets/images/emoji1.png"),
-    require("../assets/images/emoji2.png"),
-    require("../assets/images/emoji3.png"),
-    require("../assets/images/emoji4.png"),
-    require("../assets/images/emoji5.png"),
-    require("../assets/images/emoji6.png"),
-  ]);
+const emoji: ImageSource[] = [
+  require("../assets/images/emoji1.png"),
+  require("../assets/images/emoji2.png"),
+  require("../assets/images/emoji3.png"),
+  require("../assets/images/emoji4.png"),
+  require("../assets/images/emoji5.png"),
+  require("../assets/images/emoji6.png"),
+];
 
+export default function EmojiList({ onSelect, onCloseModal }: Props) {
   return (
     <FlatList
       horizontal
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     paddingHorizontal: 20,
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
