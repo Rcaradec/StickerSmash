@@ -1,5 +1,5 @@
 import * as MediaLibrary from "expo-media-library";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import ImageViewer from "@/components/ImageViewer";
 import Button from "@/components/Button";
 const PlaceholderImage = require("@/assets/images/background-image.png");
@@ -13,6 +13,7 @@ import { ImageSource } from "expo-image";
 import EmojiSticker from "@/components/EmojiSticker";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { captureRef } from "react-native-view-shot";
+import domtoimage from "dom-to-image";
 
 export default function Index() {
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
@@ -24,7 +25,7 @@ export default function Index() {
     undefined
   );
 
-  const imageRef = useRef<View>(null);
+  const imageRef = useRef(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   if (status === null) {
     requestPermission();
@@ -58,18 +59,36 @@ export default function Index() {
   };
 
   const onSaveImageAsync = async () => {
-    try {
-      const localUri = await captureRef(imageRef, {
-        height: 440,
-        quality: 1,
-      });
+    if (Platform.OS !== "web") {
+      try {
+        const localUri = await captureRef(imageRef, {
+          height: 440,
+          quality: 1,
+        });
 
-      await MediaLibrary.saveToLibraryAsync(localUri);
-      if (localUri) {
-        alert("Saved!");
+        await MediaLibrary.saveToLibraryAsync(localUri);
+        if (localUri) {
+          alert("Saved!");
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
+    } else {
+      if (imageRef.current)
+        try {
+          const dataUrl = await domtoimage.toJpeg(imageRef.current, {
+            quality: 0.95,
+            width: 320,
+            height: 440,
+          });
+
+          let link = document.createElement("a");
+          link.download = "sticker-smash.jpeg";
+          link.href = dataUrl;
+          link.click();
+        } catch (e) {
+          console.log(e);
+        }
     }
   };
 
